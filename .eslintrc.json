@@ -42,7 +42,7 @@
         "no-useless-escape": 0,
         "no-prototype-builtins": 0,
         "prefer-template": 2,
-        "prefer-destructuring": 1,
+        "prefer-destructuring": 0,
         "no-var": 2
     }
 }
