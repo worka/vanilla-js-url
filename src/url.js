@@ -1,8 +1,3 @@
-/**
- * example.com -> {}
- * example.com?bar=1&foo -> {bar: "1", foo: ""}
- * example.com?bar[]=1&bar[]=2 -> {bar: ["1", "2"]}
- */
 function getParams(url) {
     url = url || window.location.href;
 
@@ -37,12 +32,6 @@ function getParams(url) {
     return params;
 }
 
-/**
- * example.com with params {bar: 1} -> example.com?bar=1
- * example.com?bar=1&foo with params {bar: 2} -> example.com?bar=2&foo=
- * example.com?bar=1 with params {bar: [2, 3]} -> example.com?bar[]=2&bar[]=3
- * example.com?bar[]=1&bar[]=2 with params {bar: [3, 4]} -> example.com?bar[]=1&bar[]=2&bar[]=3&bar[]=4
- */
 function addParams(url, newParams) {
     if (newParams instanceof Object) {
         const uri = url.split('?', 2)[0];
