@@ -99,7 +99,7 @@
 
     var url = {
         getParams: getParams,
-        addParams: addParams,
+        addParams: addParams
     };
 
     return url;

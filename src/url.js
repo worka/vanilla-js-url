@@ -8,7 +8,7 @@ function getParams(url) {
 
     const params = {};
     const splitUrl = url.split('?', 2);
-    const queries = (splitUrl.length === 2) ? splitUrl[1].split('&') : [];
+    const queries = splitUrl.length === 2 ? splitUrl[1].split('&') : [];
 
     if (queries.length > 0) {
         for (let i = 0; i < queries.length; i++) {
@@ -53,7 +53,10 @@ function addParams(url, newParams) {
                 const value = newParams[key];
 
                 if (Array.isArray(value) && value.length) {
-                    if (currentParams[key] === undefined || !Array.isArray(currentParams[key])) {
+                    if (
+                        currentParams[key] === undefined ||
+                        !Array.isArray(currentParams[key])
+                    ) {
                         currentParams[key] = [];
                     }
 
@@ -73,14 +76,14 @@ function addParams(url, newParams) {
 
             if (Array.isArray(value) && value.length) {
                 for (let j = 0; j < value.length; j++) {
-                    queries.push(`${ key }[]=${ value[j] }`);
+                    queries.push(`${key}[]=${value[j]}`);
                 }
             } else {
-                queries.push(`${ key }=${ value }`);
+                queries.push(`${key}=${value}`);
             }
         }
 
-        url = `${ uri }?${ queries.join('&') }`;
+        url = `${uri}?${queries.join('&')}`;
     }
 
     return url;

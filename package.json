@@ -11,9 +11,10 @@
         "rollup-plugin-babel": "^4.3.3"
     },
     "scripts": {
-        "build": "yarn rollup && yarn prettier && yarn minify",
+        "build": "yarn rollup && yarn prettier:dist && yarn minify && yarn prettier:src",
         "rollup": "npx rollup --config",
-        "prettier": "npx prettier --write dist/url.js",
+        "prettier:dist": "npx prettier --write dist/url.js",
+        "prettier:src": "npx prettier --write src/url.js",
         "minify": "npx minify dist/url.js --out-file dist/url.min.js"
     },
     "repository": {
