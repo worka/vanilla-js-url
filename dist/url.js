@@ -12,31 +12,23 @@
         var params = {};
         var splitUrl = url.split('?', 2);
         var queries = splitUrl.length === 2 ? splitUrl[1].split('&') : [];
+        queries.forEach(function(query) {
+            var row = query.split('=', 2);
+            var key = row[0];
+            var value = row[1] || '';
 
-        if (queries.length > 0) {
-            for (var i = 0; i < queries.length; i++) {
-                var query = queries[i].split('=', 2);
+            if (key.substr(-2) === '[]') {
+                key = key.substr(0, key.length - 2);
 
-                if (query.length === 1) {
-                    query.push('');
+                if (params[key] === undefined) {
+                    params[key] = [];
                 }
 
-                var key = query[0];
-
-                if (key.substr(-2) === '[]') {
-                    key = key.substr(0, key.length - 2);
-
-                    if (params[key] === undefined) {
-                        params[key] = [];
-                    }
-
-                    params[key].push(decodeURIComponent(query[1]));
-                } else {
-                    params[key] = decodeURIComponent(query[1]);
-                }
+                params[key].push(decodeURIComponent(value));
+            } else {
+                params[key] = decodeURIComponent(value);
             }
-        }
-
+        });
         return params;
     }
 

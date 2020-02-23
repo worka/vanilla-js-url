@@ -6,12 +6,14 @@
         "@babel/preset-env": "^7.8.4",
         "babel-minify": "^0.5.1",
         "eslint": "^6.8.0",
+        "esm": "^3.2.25",
         "jest": "^25.1.0",
         "prettier": "1.19.1",
         "rollup": "^1.31.1",
         "rollup-plugin-babel": "^4.3.3"
     },
     "scripts": {
+        "dev": "node -r esm dev.js",
         "build": "yarn test && yarn rollup && yarn prettier && yarn minify",
         "test": "npx jest",
         "rollup": "npx rollup --config",

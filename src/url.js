@@ -5,29 +5,24 @@ function getParams(url) {
     const splitUrl = url.split('?', 2);
     const queries = splitUrl.length === 2 ? splitUrl[1].split('&') : [];
 
-    if (queries.length > 0) {
-        for (let i = 0; i < queries.length; i++) {
-            const query = queries[i].split('=', 2);
+    queries.forEach(query => {
+        const row = query.split('=', 2);
 
-            if (query.length === 1) {
-                query.push('');
+        let key = row[0];
+        let value = row[1] || '';
+
+        if (key.substr(-2) === '[]') {
+            key = key.substr(0, key.length - 2);
+
+            if (params[key] === undefined) {
+                params[key] = [];
             }
 
-            let key = query[0];
-
-            if (key.substr(-2) === '[]') {
-                key = key.substr(0, key.length - 2);
-
-                if (params[key] === undefined) {
-                    params[key] = [];
-                }
-
-                params[key].push(decodeURIComponent(query[1]));
-            } else {
-                params[key] = decodeURIComponent(query[1]);
-            }
+            params[key].push(decodeURIComponent(value));
+        } else {
+            params[key] = decodeURIComponent(value);
         }
-    }
+    });
 
     return params;
 }
