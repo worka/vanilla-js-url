@@ -1,3 +1,32 @@
+function _buildNesting(nesting, value) {
+    const object = {};
+    object[nesting[nesting.length - 1]] = value;
+
+    return nesting.length === 1
+        ? object
+        : _buildNesting(nesting.slice(0, nesting.length - 1), object);
+}
+
+function _concat2(object1, object2) {
+    console.log(1, object1, object2);
+
+    for (let prop in object2) {
+        if (object2.hasOwnProperty(prop)) {
+            if (object2[prop] instanceof Object) {
+                object1 = object1.hasOwnProperty(prop) ? object1[prop] : null;
+
+                _concat2(object1, object2[prop]);
+            } else {
+                object1 = Object.assign(object1, object2);
+
+                console.log(`Finite value: ${object2[prop]}`);
+            }
+        }
+    }
+
+    console.log(2, object1, object2);
+}
+
 function _buildParams(query) {
     const params = {};
 
@@ -7,6 +36,26 @@ function _buildParams(query) {
 
             let key = row[0];
             let value = row[1] || '';
+
+            ///////
+            ///////
+            ///////
+            const match = key.match(/.+?(\[(.*)\])/);
+
+            if (match) {
+                const raw = match[2] || '0';
+                const nesting = raw.split('][');
+                const result = _buildNesting(nesting, value);
+
+                // console.log('done', result);
+                _concat2(
+                    { foo: { too: { poo: '3' } } },
+                    { foo: { too: { hoo: '5' } } }
+                );
+            }
+            ///////
+            ///////
+            ///////
 
             if (key.substr(-2) === '[]') {
                 key = key.substr(0, key.length - 2);

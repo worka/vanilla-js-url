@@ -7,6 +7,35 @@
 })(this, function() {
     'use strict';
 
+    function _buildNesting(nesting, value) {
+        var object = {};
+        object[nesting[nesting.length - 1]] = value;
+        return nesting.length === 1
+            ? object
+            : _buildNesting(nesting.slice(0, nesting.length - 1), object);
+    }
+
+    function _concat2(object1, object2) {
+        console.log(1, object1, object2);
+
+        for (var prop in object2) {
+            if (object2.hasOwnProperty(prop)) {
+                if (object2[prop] instanceof Object) {
+                    object1 = object1.hasOwnProperty(prop)
+                        ? object1[prop]
+                        : null;
+
+                    _concat2(object1, object2[prop]);
+                } else {
+                    object1 = Object.assign(object1, object2);
+                    console.log('Finite value: '.concat(object2[prop]));
+                }
+            }
+        }
+
+        console.log(2, object1, object2);
+    }
+
     function _buildParams(query) {
         var params = {};
 
@@ -15,7 +44,37 @@
                 var row = _query.split('=', 2);
 
                 var key = row[0];
-                var value = row[1] || '';
+                var value = row[1] || ''; ///////
+                ///////
+                ///////
+
+                var match = key.match(/.+?(\[(.*)\])/);
+
+                if (match) {
+                    var raw = match[2] || '0';
+                    var nesting = raw.split('][');
+
+                    var result = _buildNesting(nesting, value); // console.log('done', result);
+
+                    _concat2(
+                        {
+                            foo: {
+                                too: {
+                                    poo: '3'
+                                }
+                            }
+                        },
+                        {
+                            foo: {
+                                too: {
+                                    hoo: '5'
+                                }
+                            }
+                        }
+                    );
+                } ///////
+                ///////
+                ///////
 
                 if (key.substr(-2) === '[]') {
                     key = key.substr(0, key.length - 2);
