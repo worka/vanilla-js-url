@@ -20,7 +20,10 @@
                 if (key.substr(-2) === '[]') {
                     key = key.substr(0, key.length - 2);
 
-                    if (params[key] === undefined) {
+                    if (
+                        params[key] === undefined ||
+                        !Array.isArray(params[key])
+                    ) {
                         params[key] = [];
                     }
 
@@ -98,9 +101,10 @@
 
     function addParams(url, newParams) {
         if (newParams instanceof Object) {
-            var uri = url.split('?', 2)[0]; // concatenating current params with new params
+            var uri = url.split('?', 2)[0];
+            var currentParams = getParams(url);
 
-            var params = _concat(getParams(url), newParams);
+            var params = _concat(currentParams, newParams);
 
             url = ''.concat(uri, '?').concat(_buildQuery(params));
         }
