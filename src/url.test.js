@@ -6,10 +6,6 @@ test('Get params from URL', () => {
     expect(JcURL.getParams('example.com?bar=1&bar=2')).toEqual({ bar: '2' });
     expect(JcURL.getParams('example.com?bar[]=1&bar[]=2')).toEqual({ bar: ['1', '2'] });
     expect(JcURL.getParams('example.com?bar=1&bar[]=2')).toEqual({ bar: ['2'] });
-    // @todo to realize
-    // expect(JcURL.getParams('example.com?bar[t]=1&bar[j]=2')).toEqual({ bar: { t: '1', j: '2' } });
-    // expect(JcURL.getParams('example.com?bar[t]=1&bar[j]=2&bar[j]=3')).toEqual({ bar: { t: '1', j: '3' } });
-    // expect(JcURL.getParams('example.com?bar[t]=1&bar[j]=2&bar[j][g]=3')).toEqual({ bar: { t: '1', j: { g: 3 } } });
 });
 
 test('Add params to URL', () => {
@@ -21,6 +17,4 @@ test('Add params to URL', () => {
     expect(JcURL.addParams('example.com?bar=1&bar[]=2', { bar: [3, 4] })).toBe('example.com?bar[]=2&bar[]=3&bar[]=4');
     expect(JcURL.addParams('example.com?bar=1&bar=2', { bar: [3, 4] })).toBe('example.com?bar[]=3&bar[]=4');
     expect(JcURL.addParams('example.com?bar[]=1&bar[]=2', { bar: [3, 4] })).toBe('example.com?bar[]=1&bar[]=2&bar[]=3&bar[]=4');
-    // @todo to realize
-    // expect(JcURL.addParams('example.com', { bar: { t: '1', j: '2' } })).toBe('example.com?bar[t]=1&bar[j]=2');
 });
