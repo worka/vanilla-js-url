@@ -17,7 +17,7 @@
         "build": "yarn test && yarn rollup && yarn prettier && yarn minify",
         "test": "npx jest",
         "rollup": "npx rollup --config",
-        "prettier": "yarn prettier:src && yarn prettier:dist",
+        "prettier": "yarn prettier:dist",
         "prettier:dist": "npx prettier --write dist/url.js",
         "prettier:src": "npx prettier --write src/url.js",
         "minify": "npx minify dist/url.js --out-file dist/url.min.js"

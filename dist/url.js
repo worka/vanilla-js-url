@@ -7,35 +7,6 @@
 })(this, function() {
     'use strict';
 
-    function _buildNesting(nesting, value) {
-        var object = {};
-        object[nesting[nesting.length - 1]] = value;
-        return nesting.length === 1
-            ? object
-            : _buildNesting(nesting.slice(0, nesting.length - 1), object);
-    }
-
-    function _concat2(object1, object2) {
-        console.log(1, object1, object2);
-
-        for (var prop in object2) {
-            if (object2.hasOwnProperty(prop)) {
-                if (object2[prop] instanceof Object) {
-                    object1 = object1.hasOwnProperty(prop)
-                        ? object1[prop]
-                        : null;
-
-                    _concat2(object1, object2[prop]);
-                } else {
-                    object1 = Object.assign(object1, object2);
-                    console.log('Finite value: '.concat(object2[prop]));
-                }
-            }
-        }
-
-        console.log(2, object1, object2);
-    }
-
     function _buildParams(query) {
         var params = {};
 
@@ -44,37 +15,7 @@
                 var row = _query.split('=', 2);
 
                 var key = row[0];
-                var value = row[1] || ''; ///////
-                ///////
-                ///////
-
-                var match = key.match(/.+?(\[(.*)\])/);
-
-                if (match) {
-                    var raw = match[2] || '0';
-                    var nesting = raw.split('][');
-
-                    var result = _buildNesting(nesting, value); // console.log('done', result);
-
-                    _concat2(
-                        {
-                            foo: {
-                                too: {
-                                    poo: '3'
-                                }
-                            }
-                        },
-                        {
-                            foo: {
-                                too: {
-                                    hoo: '5'
-                                }
-                            }
-                        }
-                    );
-                } ///////
-                ///////
-                ///////
+                var value = row[1] || '';
 
                 if (key.substr(-2) === '[]') {
                     key = key.substr(0, key.length - 2);
@@ -89,6 +30,72 @@
                     params[key].push(decodeURIComponent(value));
                 } else {
                     params[key] = decodeURIComponent(value);
+                }
+            });
+        }
+
+        return params;
+    }
+
+    function _buildNesting(nesting, value) {
+        var object = {};
+        object[nesting[nesting.length - 1]] = value;
+        return nesting.length === 1
+            ? object
+            : _buildNesting(nesting.slice(0, nesting.length - 1), object);
+    }
+
+    /**
+     * Performs a deep merge of `source` into `target`.
+     * Mutates `target` only but not its objects and arrays.
+     *
+     * Thanks @anneb for his inspiration (https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6#gistcomment-2930530).
+     */
+    function _mergeObjects(target, source) {
+        var isObject = function isObject(obj) {
+            return obj && obj instanceof Object;
+        };
+
+        if (!isObject(target) || !isObject(source)) {
+            return source;
+        }
+
+        Object.keys(source).forEach(function(key) {
+            var targetValue = target[key];
+            var sourceValue = source[key];
+
+            if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+                target[key] = targetValue.concat(sourceValue);
+            } else if (isObject(targetValue) && isObject(sourceValue)) {
+                target[key] = _mergeObjects(
+                    Object.assign({}, targetValue),
+                    sourceValue
+                );
+            } else {
+                target[key] = sourceValue;
+            }
+        });
+        return target;
+    }
+
+    function _buildParamsExtended(query) {
+        var params = {};
+
+        if (query) {
+            query.split('&').forEach(function(_query) {
+                var row = _query.split('=', 2);
+
+                var key = row[0];
+                var value = row[1] || '';
+                var match = key.match(/.+?(\[(.*)\])/);
+
+                if (match) {
+                    var raw = match[2] || '0';
+                    var nesting = raw.split('][');
+
+                    var result = _buildNesting(nesting, value); // где то тут теряется название самого параметра, у нас щас только его ключи
+
+                    params = _mergeObjects(params, result);
                 }
             });
         }
@@ -121,7 +128,7 @@
     }
 
     function _concat(currentObject, newObject) {
-        var _loop2 = function _loop2(key) {
+        var _loop = function _loop(key) {
             if (newObject.hasOwnProperty(key)) {
                 var value = newObject[key];
 
@@ -143,7 +150,7 @@
         };
 
         for (var key in newObject) {
-            _loop2(key);
+            _loop(key);
         }
 
         return currentObject;
@@ -156,6 +163,15 @@
                 : window.location.href;
         var splitUrl = url.split('?', 2);
         return _buildParams(splitUrl.length === 2 ? splitUrl[1] : '');
+    }
+
+    function getParamsExtended() {
+        var url =
+            arguments.length > 0 && arguments[0] !== undefined
+                ? arguments[0]
+                : window.location.href;
+        var splitUrl = url.split('?', 2);
+        return _buildParamsExtended(splitUrl.length === 2 ? splitUrl[1] : '');
     }
 
     function addParams(url, newParams) {
@@ -173,6 +189,7 @@
 
     var url = {
         getParams: getParams,
+        getParamsExtended: getParamsExtended,
         addParams: addParams
     };
 
