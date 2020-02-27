@@ -12,9 +12,10 @@ describe('GET', () => {
     test('getParamsExtended()', () => {
         expect(JcURL.getParamsExtended('example.com?bar[t]=1&bar[j]=2')).toEqual({ bar: { t: '1', j: '2' } });
         expect(JcURL.getParamsExtended('example.com?bar[t]=1&bar[j]=2&bar[j]=3')).toEqual({ bar: { t: '1', j: '3' } });
-        expect(JcURL.getParamsExtended('example.com?b[t]=1&b[j]=2&b[j][g]=3')).toEqual({ b: { t: '1', j: { g: 3 } } });
-        // expect(JcURL.getParamsExtended('example.com?bar=-1&bar[]=0&bar[tr]=1&bar[j]=2&bar[foo][too][poo]=3&bar[]=4&bar[foo][too][hoo]=5'))
-        //     .toEqual({ bar: { '0': 0, tr: 1, j: 2, foo: { too: { poo: 3, hoo: 5 } }, '1': 4 } });
+        expect(JcURL.getParamsExtended('example.com?b[t]=1&b[j]=2&b[j][g]=3'))
+            .toEqual({ b: { t: '1', j: { g: '3' } } });
+        expect(JcURL.getParamsExtended('example.com?bar=-1&bar[]=0&bar[tr]=1&bar[j]=2&bar[foo][too][poo]=3&bar[]=4&bar[foo][too][hoo]=5'))
+            .toEqual({ bar: { '0': '0', tr: '1', j: '2', foo: { too: { poo: '3', hoo: '5' } }, '1': '4' } });
     });
 });
 

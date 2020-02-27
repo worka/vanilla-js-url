@@ -3,6 +3,7 @@ import _mergeObjects from './_mergeObjects';
 
 export default function _buildParamsExtended(query) {
     let params = {};
+    let i = 0;
 
     if (query) {
         query.split('&').forEach(_query => {
@@ -11,15 +12,13 @@ export default function _buildParamsExtended(query) {
             let key = row[0];
             let value = row[1] || '';
 
-            const match = key.match(/.+?(\[(.*)\])/);
+            const match = key.match(/(.+?)(\[(.*)\])/);
 
             if (match) {
-                const raw = match[2] || '0';
+                const raw = match[3] || String(i++);
                 const nesting = raw.split('][');
+                nesting.unshift(match[1]);
                 const result = _buildNesting(nesting, value);
-
-                // где то тут теряется название самого параметра, у нас щас только его ключи
-
 
                 params = _mergeObjects(params, result);
             }

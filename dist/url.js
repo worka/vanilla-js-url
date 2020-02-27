@@ -80,6 +80,7 @@
 
     function _buildParamsExtended(query) {
         var params = {};
+        var i = 0;
 
         if (query) {
             query.split('&').forEach(function(_query) {
@@ -87,13 +88,14 @@
 
                 var key = row[0];
                 var value = row[1] || '';
-                var match = key.match(/.+?(\[(.*)\])/);
+                var match = key.match(/(.+?)(\[(.*)\])/);
 
                 if (match) {
-                    var raw = match[2] || '0';
+                    var raw = match[3] || String(i++);
                     var nesting = raw.split('][');
+                    nesting.unshift(match[1]);
 
-                    var result = _buildNesting(nesting, value); // где то тут теряется название самого параметра, у нас щас только его ключи
+                    var result = _buildNesting(nesting, value);
 
                     params = _mergeObjects(params, result);
                 }
