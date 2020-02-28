@@ -3,7 +3,7 @@
         ? (module.exports = factory())
         : typeof define === 'function' && define.amd
         ? define(factory)
-        : ((global = global || self), (global.JcURL = factory()));
+        : ((global = global || self), (global.jcurl = factory()));
 })(this, function() {
     'use strict';
 
@@ -51,7 +51,7 @@
      *
      * Thanks @anneb for his inspiration (https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6#gistcomment-2930530).
      */
-    function _mergeObjects(target, source) {
+    function _mergeObjectsDeep(target, source) {
         var isObject = function isObject(obj) {
             return obj && obj instanceof Object;
         };
@@ -67,7 +67,7 @@
             if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
                 target[key] = targetValue.concat(sourceValue);
             } else if (isObject(targetValue) && isObject(sourceValue)) {
-                target[key] = _mergeObjects(
+                target[key] = _mergeObjectsDeep(
                     Object.assign({}, targetValue),
                     sourceValue
                 );
@@ -87,7 +87,8 @@
                 var row = _query.split('=', 2);
 
                 var key = row[0];
-                var value = row[1] || '';
+                var value = row[1] || ''; // @todo написать получение ключей по-нормальному
+
                 var match = key.match(/(.+?)(\[(.*)\])/);
 
                 if (match) {
@@ -97,7 +98,7 @@
 
                     var result = _buildNesting(nesting, value);
 
-                    params = _mergeObjects(params, result);
+                    params = _mergeObjectsDeep(params, result);
                 }
             });
         }
@@ -129,7 +130,11 @@
         return queries.join('&');
     }
 
-    function _concat(currentObject, newObject) {
+    function _buildQueryDeep(params) {
+        console.log(params);
+    }
+
+    function _mergeObjects(currentObject, newObject) {
         var _loop = function _loop(key) {
             if (newObject.hasOwnProperty(key)) {
                 var value = newObject[key];
@@ -181,9 +186,22 @@
             var uri = url.split('?', 2)[0];
             var currentParams = getParams(url);
 
-            var params = _concat(currentParams, newParams);
+            var params = _mergeObjects(currentParams, newParams);
 
             url = ''.concat(uri, '?').concat(_buildQuery(params));
+        }
+
+        return url;
+    }
+
+    function addParamsExtended(url, newParams) {
+        if (newParams instanceof Object) {
+            var uri = url.split('?', 2)[0];
+            var currentParams = getParams(url);
+
+            var params = _mergeObjectsDeep(currentParams, newParams);
+
+            url = ''.concat(uri, '?').concat(_buildQueryDeep(params));
         }
 
         return url;
@@ -192,7 +210,13 @@
     var url = {
         getParams: getParams,
         getParamsExtended: getParamsExtended,
-        addParams: addParams
+        addParams: addParams,
+        addParamsExtended: addParamsExtended,
+        // short aliases
+        get: getParams,
+        getExt: getParamsExtended,
+        add: addParams,
+        addExt: addParamsExtended
     };
 
     return url;

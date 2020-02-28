@@ -1,5 +1,5 @@
 import _buildNesting from './_buildNesting';
-import _mergeObjects from './_mergeObjects';
+import _mergeObjectsDeep from './_mergeObjectsDeep';
 
 export default function _buildParamsExtended(query) {
     let params = {};
@@ -21,7 +21,7 @@ export default function _buildParamsExtended(query) {
                 nesting.unshift(match[1]);
                 const result = _buildNesting(nesting, value);
 
-                params = _mergeObjects(params, result);
+                params = _mergeObjectsDeep(params, result);
             }
         });
     }

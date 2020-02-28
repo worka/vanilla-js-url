@@ -1,7 +1,9 @@
 import _buildParams from './_buildParams';
 import _buildParamsExtended from './_buildParamsExtended';
 import _buildQuery from './_buildQuery';
-import _concat from './_concat';
+import _buildQueryDeep from './_buildQueryDeep';
+import _mergeObjects from './_mergeObjects';
+import _mergeObjectsDeep from './_mergeObjectsDeep';
 
 function getParams(url = window.location.href) {
     const splitUrl = url.split('?', 2);
@@ -19,9 +21,21 @@ function addParams(url, newParams) {
     if (newParams instanceof Object) {
         const uri = url.split('?', 2)[0];
         const currentParams = getParams(url);
-        const params = _concat(currentParams, newParams);
+        const params = _mergeObjects(currentParams, newParams);
 
         url = `${ uri }?${ _buildQuery(params) }`;
+    }
+
+    return url;
+}
+
+function addParamsExtended(url, newParams) {
+    if (newParams instanceof Object) {
+        const uri = url.split('?', 2)[0];
+        const currentParams = getParams(url);
+        const params = _mergeObjectsDeep(currentParams, newParams);
+
+        url = `${ uri }?${ _buildQueryDeep(params) }`;
     }
 
     return url;
@@ -30,5 +44,11 @@ function addParams(url, newParams) {
 export default {
     getParams,
     getParamsExtended,
-    addParams
+    addParams,
+    addParamsExtended,
+    // short aliases
+    get: getParams,
+    getExt: getParamsExtended,
+    add: addParams,
+    addExt: addParamsExtended
 };
