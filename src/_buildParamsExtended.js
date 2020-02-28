@@ -12,6 +12,7 @@ export default function _buildParamsExtended(query) {
             let key = row[0];
             let value = row[1] || '';
 
+            // @todo написать получение ключей по-нормальному
             const match = key.match(/(.+?)(\[(.*)\])/);
 
             if (match) {
