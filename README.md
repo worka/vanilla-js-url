@@ -5,6 +5,7 @@ Object for working with url
 jcurl.getParams('example.com?bar=1&foo');
 jcurl.addParams('example.com', { bar: 1, foo: 2 });
 ````
+_`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 
 ### getParams(String url)
 `alias get()`
