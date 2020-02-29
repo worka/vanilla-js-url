@@ -5,7 +5,7 @@ module.exports = {
     output: {
         file: 'dist/url.js',
         format: 'umd',
-        name: 'JcURL'
+        name: 'jcurl'
     },
     plugins: [
         babel()

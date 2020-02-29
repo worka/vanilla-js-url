@@ -1,74 +1,9 @@
-function _buildParams(query) {
-    const params = {};
-
-    if (query) {
-        query.split('&').forEach(_query => {
-            const row = _query.split('=', 2);
-
-            let key = row[0];
-            let value = row[1] || '';
-
-            if (key.substr(-2) === '[]') {
-                key = key.substr(0, key.length - 2);
-
-                if (params[key] === undefined || !Array.isArray(params[key])) {
-                    params[key] = [];
-                }
-
-                params[key].push(decodeURIComponent(value));
-            } else {
-                params[key] = decodeURIComponent(value);
-            }
-        });
-    }
-
-    return params;
-}
-
-function _buildQuery(params) {
-    const queries = [];
-
-    for (let key in params) {
-        if (params.hasOwnProperty(key)) {
-            const value = params[key];
-
-            if (Array.isArray(value) && value.length) {
-                value.forEach(_value => {
-                    queries.push(`${key}[]=${_value}`);
-                });
-            } else {
-                queries.push(`${key}=${value}`);
-            }
-        }
-    }
-
-    return queries.join('&');
-}
-
-function _concat(currentObject, newObject) {
-    for (let key in newObject) {
-        if (newObject.hasOwnProperty(key)) {
-            const value = newObject[key];
-
-            if (Array.isArray(value) && value.length) {
-                if (
-                    currentObject[key] === undefined ||
-                    !Array.isArray(currentObject[key])
-                ) {
-                    currentObject[key] = [];
-                }
-
-                value.forEach(_value => {
-                    currentObject[key].push(_value);
-                });
-            } else {
-                currentObject[key] = newObject[key];
-            }
-        }
-    }
-
-    return currentObject;
-}
+import _buildParams from './_buildParams';
+import _buildParamsExtended from './_buildParamsExtended';
+import _buildQuery from './_buildQuery';
+import _buildQueryDeep from './_buildQueryDeep';
+import _mergeObjects from './_mergeObjects';
+import _mergeObjectsDeep from './_mergeObjectsDeep';
 
 function getParams(url = window.location.href) {
     const splitUrl = url.split('?', 2);
@@ -76,13 +11,31 @@ function getParams(url = window.location.href) {
     return _buildParams(splitUrl.length === 2 ? splitUrl[1] : '');
 }
 
+function getParamsExtended(url = window.location.href) {
+    const splitUrl = url.split('?', 2);
+
+    return _buildParamsExtended(splitUrl.length === 2 ? splitUrl[1] : '');
+}
+
 function addParams(url, newParams) {
     if (newParams instanceof Object) {
         const uri = url.split('?', 2)[0];
         const currentParams = getParams(url);
-        const params = _concat(currentParams, newParams);
+        const params = _mergeObjects(currentParams, newParams);
 
-        url = `${uri}?${_buildQuery(params)}`;
+        url = `${ uri }?${ _buildQuery(params) }`;
+    }
+
+    return url;
+}
+
+function addParamsExtended(url, newParams) {
+    if (newParams instanceof Object) {
+        const uri = url.split('?', 2)[0];
+        const currentParams = getParams(url);
+        const params = _mergeObjectsDeep(currentParams, newParams);
+
+        url = `${ uri }?${ _buildQueryDeep(params) }`;
     }
 
     return url;
@@ -90,5 +43,12 @@ function addParams(url, newParams) {
 
 export default {
     getParams,
-    addParams
+    getParamsExtended,
+    addParams,
+    addParamsExtended,
+    // short aliases
+    get: getParams,
+    getExt: getParamsExtended,
+    add: addParams,
+    addExt: addParamsExtended
 };
