@@ -35,8 +35,6 @@ function addParamsExtended(url, newParams) {
         const currentParams = getParams(url);
         const params = _mergeObjectsDeep(currentParams, newParams);
 
-        console.log('Result', _buildQueryDeep(params));
-
         url = `${ uri }?${ _buildQueryDeep(params) }`;
     }
 

@@ -32,6 +32,17 @@ describe('ADD', () => {
     });
 
     test('addParamsExtended()', () => {
-        // expect(jcurl.addParamsExtended('example.com', { bar: { t: '1', j: '2' } })).toBe('example.com?bar[t]=1&bar[j]=2');
+        expect(jcurl.addParamsExtended('example.com', { bar: 1, foo: 2 })).toBe('example.com?bar=1&foo=2');
+        /**
+         * BUG
+         */
+        // expect(jcurl.addParamsExtended('example.com?bar[foo]=test&bar[joo]=2', { bar: { foo: 'new', too: 5 } }))
+        //     .toBe('example.com?bar[foo]=new&bar[joo]=2&bar[too]=5');
+        expect(jcurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } }))
+            .toBe('example.com?bar[foo]=test&bar[joo]=2');
+        expect(jcurl.addParamsExtended('example.com', {
+            f1: { f11: 1, f12: 2, f13: 3 }, f2: 4, f3: { f31: { f311: 6, f312: { f3121: 9 } }, f32: { f321: 2 } },
+            f4: { f41: 3, f42: { f421: 2 } }, f5: [2, 4]
+        })).toBe('example.com?f1[f11]=1&f1[f12]=2&f1[f13]=3&f2=4&f3[f31][f311]=6&f3[f31][f312][f3121]=9&f3[f32][f321]=2&f4[f41]=3&f4[f42][f421]=2&f5[0]=2&f5[1]=4');
     });
 });

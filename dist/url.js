@@ -130,13 +130,7 @@
         return queries.join('&');
     }
 
-    function _buildQueryDeep(params) {
-        var tree = [];
-        stage(params, [], tree);
-        return tree;
-    }
-
-    function stage(params, branch, tree) {
+    function _simplifyObject(params, branch, tree) {
         for (
             var _i = 0, _Object$keys = Object.keys(params);
             _i < _Object$keys.length;
@@ -147,12 +141,31 @@
             var params2 = params[key];
 
             if (params2 instanceof Object) {
-                stage(params2, branch2, tree);
+                _simplifyObject(params2, branch2, tree);
             } else {
                 branch2.push(params2);
                 tree.push(branch2);
             }
         }
+    }
+
+    function _buildQueryDeep(params) {
+        var tree = [];
+
+        _simplifyObject(params, [], tree);
+
+        var parts = tree.map(function(branch) {
+            return branch.reduce(function(str, item, i) {
+                if (!str) {
+                    return str + item;
+                } else if (i < branch.length - 1) {
+                    return ''.concat(str, '[').concat(item, ']');
+                } else {
+                    return ''.concat(str, '=').concat(item);
+                }
+            }, '');
+        });
+        return parts.join('&');
     }
 
     function _mergeObjects(currentObject, newObject) {
@@ -222,7 +235,6 @@
 
             var params = _mergeObjectsDeep(currentParams, newParams);
 
-            console.log('Result', _buildQueryDeep(params));
             url = ''.concat(uri, '?').concat(_buildQueryDeep(params));
         }
 

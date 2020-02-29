@@ -1,21 +1,21 @@
+import _simplifyObject from './_simplifyObject';
+
 export default function _buildQueryDeep(params) {
     const tree = [];
 
-    stage(params, [], tree);
+    _simplifyObject(params, [], tree);
 
-    return tree;
-}
+    const parts = tree.map(branch => {
+        return branch.reduce((str, item, i) => {
+            if (!str) {
+                return str + item;
+            } else if (i < branch.length - 1) {
+                return `${ str }[${ item }]`;
+            } else {
+                return `${ str }=${ item }`;
+            }
+        }, '');
+    });
 
-function stage(params, branch, tree) {
-    for (let key of Object.keys(params)) {
-        const branch2 = branch.concat([key]);
-        const params2 = params[key];
-
-        if (params2 instanceof Object) {
-            stage(params2, branch2, tree);
-        } else {
-            branch2.push(params2);
-            tree.push(branch2);
-        }
-    }
+    return parts.join('&');
 }
