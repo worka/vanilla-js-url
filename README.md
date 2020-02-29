@@ -8,6 +8,20 @@ GET parameters: **simple get**, **simple add**
 [![GitHub issues](https://img.shields.io/github/issues/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/issues)
 [![GitHub forks](https://img.shields.io/github/forks/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/network)
 
+### Install
+
+```cmd
+npm i vanilla-js-url
+```
+
+or
+
+```cmd
+yarn add vanilla-js-url
+```
+
+### Get started
+
 ```javascript
 jcurl.getParams('example.com?bar=1&foo');
 jcurl.addParams('example.com', { bar: 1, foo: 2 });
@@ -17,7 +31,7 @@ jcurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
 ````
 _`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 
-### getParams(String url)
+#### getParams(String url)
 `alias get()`
 
 > If you have simple parameters like `bar=1` or `foo[]=3&foo[]=5`, then use `getParams()`.<br />
@@ -41,7 +55,7 @@ jcurl.get('example.com?bar=1&bar[]=2');
 // { bar: ['2'] }
 ```
 
-### addParams(String url, Object params)
+#### addParams(String url, Object params)
 `alias add()`
 
 ```javascript
@@ -57,7 +71,7 @@ jcurl.add('example.com?bar=1', { bar: [2, 3] });
 jcurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
 // example.com?bar[]=2&bar[]=3&bar[]=4
 ```
-### getParamsExtended(String url)
+#### getParamsExtended(String url)
 `alias getExt()`
 
 > If you have complex parameters like: `bar[foo][too][poo]=3&bar[foo][goo]=4`, then use `getParamsExtended()`.<br />
@@ -69,7 +83,7 @@ jcurl.getExt('example.com?bar[t]=1&bar[j]=2');
 // { bar: { t: '1', j: '2' } }
 ```
 
-### addParamsExtended(String url, Object params)
+#### addParamsExtended(String url, Object params)
 `alias addExt()`
 
 ```javascript
