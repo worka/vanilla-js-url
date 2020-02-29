@@ -1,20 +1,21 @@
-export default function _buildQueryDeep(params, branch = [], tree = []) {
+export default function _buildQueryDeep(params) {
+    const tree = [];
 
-    for (let key of Object.keys(params)) {
-        branch.push(key);
-
-        if (params[key] instanceof Object) {
-            branch = _buildQueryDeep(params[key], branch);
-        } else {
-            branch.push(params[key]);
-            tree.push(branch);
-
-            return tree;
-        }
-    }
-
-
-    console.log(params, branch);
+    stage(params, [], tree);
 
     return tree;
+}
+
+function stage(params, branch, tree) {
+    for (let key of Object.keys(params)) {
+        const branch2 = branch.concat([key]);
+        const params2 = params[key];
+
+        if (params2 instanceof Object) {
+            stage(params2, branch2, tree);
+        } else {
+            branch2.push(params2);
+            tree.push(branch2);
+        }
+    }
 }
