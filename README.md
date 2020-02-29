@@ -2,9 +2,7 @@
 
 Object for working with url
 
-GET parameters:<br />
-**simple get**<br />
-**simple add**
+GET parameters: **simple get**, **simple add**
 
 ```javascript
 jcurl.getParams('example.com?bar=1&foo');
@@ -28,25 +26,33 @@ jcurl.get('example.com');
 
 jcurl.get('example.com?bar=1&foo');
 // { bar: '1', foo: '' }
+
+jcurl.get('example.com?bar=1&bar=2');
+// { bar: '2' }
+
+jcurl.get('example.com?bar[]=1&bar[]=2');
+// { bar: ['1', '2'] }
+
+jcurl.get('example.com?bar=1&bar[]=2');
+// { bar: ['2'] }
 ```
-* <b>example.com</b> return <b>`{}`</b>
-* <b>example.com?bar=1&foo</b> return <b>`{ bar: '1', foo: '' }`</b>
-* <b>example.com?bar=1&bar=2</b> return <b>`{ bar: '2' }`</b>
-* <b>example.com?bar[]=1&bar[]=2</b> return <b>`{ bar: ['1', '2'] }`</b>
-* <b>example.com?bar=1&bar[]=2</b> return <b>`{ bar: ['2'] }`</b>
 
 ### addParams(String url, Object params)
 `alias add()`
 
-* <b>example.com</b> & <b>`{ bar: 1 }`</b> return <b>example.com?bar=1</b>
-* <b>example.com</b> & <b>`{ bar: 1, foo: 2 }`</b> return <b>example.com?bar=1&foo=2</b>
-* <b>example.com?bar=1&foo</b> & <b>`{ bar: 2 }`</b> return <b>example.com?bar=2&foo=</b>
-* <b>example.com?bar=1&foo</b> & <b>`{ bar: 2, foo: 2 }`</b> return <b>example.com?bar=2&foo=2</b>
-* <b>example.com?bar=1</b> & <b>`{ bar: [2, 3] }`</b> return <b>example.com?bar[]=2&bar[]=3</b>
-* <b>example.com?bar=1&bar[]=2</b> & <b>`{ bar: [3, 4] }`</b> return <b>example.com?bar[]=2&bar[]=3&bar[]=4</b>
-* <b>example.com?bar=1&bar=2</b> & <b>`{ bar: [3, 4] }`</b> return <b>example.com?bar[]=3&bar[]=4</b>
-* <b>example.com?bar[]=1&bar[]=2</b> & <b>`{ bar: [3, 4] }`</b> return <b>example.com?bar[]=1&bar[]=2&bar[]=3&bar[]=4</b>
+```javascript
+jcurl.add('example.com', { bar: 1, foo: 2 });
+// example.com?bar=1&foo=2
 
+jcurl.add('example.com?bar=1&foo', { bar: 2, foo: 2 });
+// example.com?bar=2&foo=2
+
+jcurl.add('example.com?bar=1', { bar: [2, 3] });
+// example.com?bar[]=2&bar[]=3
+
+jcurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
+// example.com?bar[]=2&bar[]=3&bar[]=4
+```
 ### getParamsExtended(String url)
 `alias getExt()`
 
@@ -54,7 +60,17 @@ jcurl.get('example.com?bar=1&foo');
 > In response, you will get a multi-level object.
 > Most likely you will not need this function.
 
+```javascript
+jcurl.getExt('example.com?bar[t]=1&bar[j]=2');
+// { bar: { t: '1', j: '2' } }
+```
+
 ### addParamsExtended(String url, Object params)
 `alias addExt()`
+
+```javascript
+jcurl.addExt('example.com', { bar: { foo: 'test', joo: 2 } });
+// example.com?bar[foo]=test&bar[joo]=2
+```
 
 The `getParamsExtended` and `addParamsExtended` functions may not answer exactly. Please tell me which tests failed.
