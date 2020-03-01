@@ -1,3 +1,7 @@
+/**
+ * @param params
+ * @returns {string}
+ */
 export default function _buildQuery(params) {
     const queries = [];
 
@@ -17,3 +21,10 @@ export default function _buildQuery(params) {
 
     return queries.join('&');
 }
+
+/**
+ * Description:
+ *
+ * IN: { bar: 2, foo: 2 }
+ * OUT: bar=2&foo=2
+ */

@@ -1,3 +1,8 @@
+/**
+ * @param currentObject
+ * @param newObject
+ * @returns {*}
+ */
 export default function _mergeObjects(currentObject, newObject) {
     for (let key in newObject) {
         if (newObject.hasOwnProperty(key)) {
@@ -22,3 +27,10 @@ export default function _mergeObjects(currentObject, newObject) {
 
     return currentObject;
 }
+
+/**
+ * Description:
+ *
+ * IN: { bar: 2 }, { foo: 2 }
+ * OUT: { bar: 2 , foo: 2 }
+ */

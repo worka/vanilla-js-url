@@ -43,6 +43,7 @@
         "no-prototype-builtins": 0,
         "prefer-template": 2,
         "prefer-destructuring": 0,
-        "no-var": 2
+        "no-var": 2,
+        "no-console": 2
     }
 }

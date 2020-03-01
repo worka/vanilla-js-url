@@ -1,3 +1,7 @@
+/**
+ * @param query
+ * @returns {{}}
+ */
 export default function _buildParams(query) {
     const params = {};
 
@@ -24,3 +28,10 @@ export default function _buildParams(query) {
 
     return params;
 }
+
+/**
+ * Description:
+ *
+ * IN: bar=1&foo
+ * OUT: { bar: '1', foo: '' }
+ */

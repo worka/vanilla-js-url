@@ -1,30 +1,39 @@
 import _buildNesting from './_buildNesting';
 import _mergeObjectsDeep from './_mergeObjectsDeep';
 
+/**
+ * @param query
+ * @returns {{}}
+ */
 export default function _buildParamsExtended(query) {
     let params = {};
-    let i = 0;
 
-    if (query) {
-        query.split('&').forEach(_query => {
-            const row = _query.split('=', 2);
+    query.split('&').forEach((_query, i) => {
+        const row = _query.split('=', 2);
 
-            let key = row[0];
-            let value = row[1] || '';
+        let key = row[0];
+        let value = row[1] || '';
 
-            // @todo написать получение ключей по-нормальному
-            const match = key.match(/(.+?)(\[(.*)\])/);
+        // @todo написать получение ключей по-нормальному
+        const match = key.match(/(.+?)(\[(.*)\])/i);
 
-            if (match) {
-                const raw = match[3] || String(i++);
-                const nesting = raw.split('][');
-                nesting.unshift(match[1]);
-                const result = _buildNesting(nesting, value);
+        if (match) {
+            const raw = match[3] || String(i);
+            const array = raw.split('][');
+            array.unshift(match[1]);
 
-                params = _mergeObjectsDeep(params, result);
-            }
-        });
-    }
+            const nesting = _buildNesting(array, value);
+
+            params = _mergeObjectsDeep(params, nesting);
+        }
+    });
 
     return params;
 }
+
+/**
+ * Description:
+ *
+ * IN: bar[foo][too][poo]=3&bar[foo][goo]=4&bar[foo][too][hoo]=5&newbar[tee]=5
+ * OUT: { bar: { foo: { too: { poo: 3, hoo: 5 }, goo: '4' } }, newbar: { tee: '5' } }
+ */

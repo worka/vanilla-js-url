@@ -15,7 +15,7 @@ describe('GET', () => {
         expect(jcurl.getParamsExtended('example.com?b[t]=1&b[j]=2&b[j][g]=3'))
             .toEqual({ b: { t: '1', j: { g: '3' } } });
         expect(jcurl.getParamsExtended('example.com?bar=-1&bar[]=0&bar[tr]=1&bar[j]=2&bar[foo][too][poo]=3&bar[]=4&bar[foo][too][hoo]=5'))
-            .toEqual({ bar: { '0': '0', tr: '1', j: '2', foo: { too: { poo: '3', hoo: '5' } }, '1': '4' } });
+            .toEqual({ bar: { '1': '0', tr: '1', j: '2', foo: { too: { poo: '3', hoo: '5' } }, '5': '4' } });
     });
 });
 

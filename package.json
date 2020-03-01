@@ -14,7 +14,8 @@
     },
     "scripts": {
         "dev": "node -r esm dev.js",
-        "build": "yarn test && yarn rollup && yarn prettier && yarn minify",
+        "build": "yarn eslint && yarn test && yarn rollup && yarn prettier && yarn minify",
+        "eslint": "npx eslint src",
         "test": "npx jest",
         "rollup": "npx rollup --config",
         "prettier": "yarn prettier:dist",

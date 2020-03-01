@@ -1,8 +1,20 @@
-export default function _buildNesting(nesting, value) {
+/**
+ * @param array
+ * @param value
+ * @returns {{}}
+ */
+export default function _buildNesting(array, value) {
     const object = {};
-    object[nesting[nesting.length - 1]] = value;
+    object[array[array.length - 1]] = value;
 
-    return nesting.length === 1
+    return array.length === 1
         ? object
-        : _buildNesting(nesting.slice(0, nesting.length - 1), object);
+        : _buildNesting(array.slice(0, array.length - 1), object);
 }
+
+/**
+ * Description:
+ *
+ * IN: [ 'bar', 'foo', 'goo' ], 5
+ * OUT: { bar: { foo: { goo: '5' } } }
+ */

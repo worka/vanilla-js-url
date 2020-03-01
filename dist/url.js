@@ -7,6 +7,10 @@
 })(this, function() {
     'use strict';
 
+    /**
+     * @param query
+     * @returns {{}}
+     */
     function _buildParams(query) {
         var params = {};
 
@@ -36,20 +40,38 @@
 
         return params;
     }
-
-    function _buildNesting(nesting, value) {
-        var object = {};
-        object[nesting[nesting.length - 1]] = value;
-        return nesting.length === 1
-            ? object
-            : _buildNesting(nesting.slice(0, nesting.length - 1), object);
-    }
+    /**
+     * Description:
+     *
+     * IN: bar=1&foo
+     * OUT: { bar: '1', foo: '' }
+     */
 
     /**
-     * Performs a deep merge of `source` into `target`.
-     * Mutates `target` only but not its objects and arrays.
+     * @param array
+     * @param value
+     * @returns {{}}
+     */
+    function _buildNesting(array, value) {
+        var object = {};
+        object[array[array.length - 1]] = value;
+        return array.length === 1
+            ? object
+            : _buildNesting(array.slice(0, array.length - 1), object);
+    }
+    /**
+     * Description:
      *
-     * Thanks @anneb for his inspiration (https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6#gistcomment-2930530).
+     * IN: [ 'bar', 'foo', 'goo' ], 5
+     * OUT: { bar: { foo: { goo: '5' } } }
+     */
+
+    /**
+     * Thanks @anneb for his inspiration (https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6#gistcomment-2930530)
+     *
+     * @param target
+     * @param source
+     * @returns {*}
      */
     function _mergeObjectsDeep(target, source) {
         var isObject = function isObject(obj) {
@@ -77,35 +99,51 @@
         });
         return target;
     }
+    /**
+     * Description:
+     *
+     * IN: { bar: { '1': '0', tr: '1' } }, { bar: { j: '2' } }
+     * OUT: { bar: { '1': '0', tr: '1', j: '2' } }
+     */
+
+    /**
+     * @param query
+     * @returns {{}}
+     */
 
     function _buildParamsExtended(query) {
         var params = {};
-        var i = 0;
+        query.split('&').forEach(function(_query, i) {
+            var row = _query.split('=', 2);
 
-        if (query) {
-            query.split('&').forEach(function(_query) {
-                var row = _query.split('=', 2);
+            var key = row[0];
+            var value = row[1] || ''; // @todo написать получение ключей по-нормальному
 
-                var key = row[0];
-                var value = row[1] || ''; // @todo написать получение ключей по-нормальному
+            var match = key.match(/(.+?)(\[(.*)\])/i);
 
-                var match = key.match(/(.+?)(\[(.*)\])/);
+            if (match) {
+                var raw = match[3] || String(i);
+                var array = raw.split('][');
+                array.unshift(match[1]);
 
-                if (match) {
-                    var raw = match[3] || String(i++);
-                    var nesting = raw.split('][');
-                    nesting.unshift(match[1]);
+                var nesting = _buildNesting(array, value);
 
-                    var result = _buildNesting(nesting, value);
-
-                    params = _mergeObjectsDeep(params, result);
-                }
-            });
-        }
-
+                params = _mergeObjectsDeep(params, nesting);
+            }
+        });
         return params;
     }
+    /**
+     * Description:
+     *
+     * IN: bar[foo][too][poo]=3&bar[foo][goo]=4&bar[foo][too][hoo]=5&newbar[tee]=5
+     * OUT: { bar: { foo: { too: { poo: 3, hoo: 5 }, goo: '4' } }, newbar: { tee: '5' } }
+     */
 
+    /**
+     * @param params
+     * @returns {string}
+     */
     function _buildQuery(params) {
         var queries = [];
 
@@ -129,14 +167,20 @@
 
         return queries.join('&');
     }
+    /**
+     * Description:
+     *
+     * IN: { bar: 2, foo: 2 }
+     * OUT: bar=2&foo=2
+     */
 
+    /**
+     * @param params
+     * @param branch
+     * @param tree
+     */
     function _simplifyObject(params, branch, tree) {
-        for (
-            var _i = 0, _Object$keys = Object.keys(params);
-            _i < _Object$keys.length;
-            _i++
-        ) {
-            var key = _Object$keys[_i];
+        Object.keys(params).forEach(function(key) {
             var branch2 = branch.concat([key]);
             var params2 = params[key];
 
@@ -146,8 +190,37 @@
                 branch2.push(params2);
                 tree.push(branch2);
             }
-        }
+        });
     }
+    /**
+     * Description:
+     *
+     * IN: {
+     *      bar: { t: '1', j: '2', y: '2' },
+     *      foo: 4,
+     *      roo: { y: { gh: 6, tr: { t: 9 } }, t: { e: 2 } },
+     *      uoo: { y: 3, t: { e: 2 } },
+     *      joo: [ 2, 4 ]
+     *     }
+     * OUT: [
+     *      [ 'bar', 't', '1' ],
+     *      [ 'bar', 'j', '2' ],
+     *      [ 'bar', 'y', '2' ],
+     *      [ 'foo', 4 ],
+     *      [ 'roo', 'y', 'gh', 6 ],
+     *      [ 'roo', 'y', 'tr', 't', 9 ],
+     *      [ 'roo', 't', 'e', 2 ],
+     *      [ 'uoo', 'y', 3 ],
+     *      [ 'uoo', 't', 'e', 2 ],
+     *      [ 'joo', '0', 2 ],
+     *      [ 'joo', '1', 4 ]
+     *     ]
+     */
+
+    /**
+     * @param params
+     * @returns {string}
+     */
 
     function _buildQueryDeep(params) {
         var tree = [];
@@ -167,7 +240,24 @@
         });
         return parts.join('&');
     }
+    /**
+     * Description:
+     *
+     * IN: {
+     *      bar: { t: '1', j: '2', y: '2' },
+     *      foo: 4,
+     *      roo: { y: { gh: 6, tr: { t: 9 } }, t: { e: 2 } },
+     *      uoo: { y: 3, t: { e: 2 } },
+     *      joo: [ 2, 4 ]
+     *     }
+     * OUT: bar[t]=1&bar[j]=2&bar[y]=2&foo=4&roo[y][gh]=6&roo[y][tr][t]=9&roo[t][e]=2&uoo[y]=3&uoo[t][e]=2&joo[0]=2&joo[1]=4
+     */
 
+    /**
+     * @param currentObject
+     * @param newObject
+     * @returns {*}
+     */
     function _mergeObjects(currentObject, newObject) {
         var _loop = function _loop(key) {
             if (newObject.hasOwnProperty(key)) {
@@ -196,6 +286,12 @@
 
         return currentObject;
     }
+    /**
+     * Description:
+     *
+     * IN: { bar: 2 }, { foo: 2 }
+     * OUT: { bar: 2 , foo: 2 }
+     */
 
     function getParams() {
         var url =
