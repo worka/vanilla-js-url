@@ -1,10 +1,10 @@
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
-        ? (module.exports = factory())
+        ? factory(exports)
         : typeof define === 'function' && define.amd
-        ? define(factory)
-        : ((global = global || self), (global.jcurl = factory()));
-})(this, function() {
+        ? define(['exports'], factory)
+        : ((global = global || self), factory((global.jcurl = {})));
+})(this, function(exports) {
     'use strict';
 
     /**
@@ -336,18 +336,25 @@
 
         return url;
     }
+    //     getParams,
+    //     getParamsExtended,
+    //     addParams,
+    //     addParamsExtended,
+    //     // short aliases
+    //     get: getParams,
+    //     getExt: getParamsExtended,
+    //     add: addParams,
+    //     addExt: addParamsExtended
+    // };
 
-    var url = {
-        getParams: getParams,
-        getParamsExtended: getParamsExtended,
-        addParams: addParams,
-        addParamsExtended: addParamsExtended,
-        // short aliases
-        get: getParams,
-        getExt: getParamsExtended,
-        add: addParams,
-        addExt: addParamsExtended
-    };
+    exports.add = addParams;
+    exports.addExt = addParamsExtended;
+    exports.addParams = addParams;
+    exports.addParamsExtended = addParamsExtended;
+    exports.get = getParams;
+    exports.getExt = getParamsExtended;
+    exports.getParams = getParams;
+    exports.getParamsExtended = getParamsExtended;
 
-    return url;
+    Object.defineProperty(exports, '__esModule', { value: true });
 });

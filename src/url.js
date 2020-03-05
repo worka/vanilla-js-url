@@ -41,14 +41,26 @@ function addParamsExtended(url, newParams) {
     return url;
 }
 
-export default {
+export {
     getParams,
     getParamsExtended,
     addParams,
     addParamsExtended,
     // short aliases
-    get: getParams,
-    getExt: getParamsExtended,
-    add: addParams,
-    addExt: addParamsExtended
+    getParams as get,
+    getParamsExtended as getExt,
+    addParams as add,
+    addParamsExtended as addExt
 };
+
+// export default {
+//     getParams,
+//     getParamsExtended,
+//     addParams,
+//     addParamsExtended,
+//     // short aliases
+//     get: getParams,
+//     getExt: getParamsExtended,
+//     add: addParams,
+//     addExt: addParamsExtended
+// };
