@@ -1,3 +1,5 @@
+import _decodeUrlParameter from './_decodeUrlParameter';
+
 /**
  * @param query
  * @returns {{}}
@@ -19,9 +21,9 @@ export default function _buildParams(query) {
                     params[key] = [];
                 }
 
-                params[key].push(decodeURIComponent(value));
+                params[key].push(_decodeUrlParameter(value));
             } else {
-                params[key] = decodeURIComponent(value);
+                params[key] = _decodeUrlParameter(value);
             }
         });
     }

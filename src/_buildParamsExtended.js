@@ -1,5 +1,6 @@
 import _buildNesting from './_buildNesting';
 import _mergeObjectsDeep from './_mergeObjectsDeep';
+import _decodeUrlParameter from './_decodeUrlParameter';
 
 /**
  * @param query
@@ -22,7 +23,7 @@ export default function _buildParamsExtended(query) {
             const array = raw.split('][');
             array.unshift(match[1]);
 
-            const nesting = _buildNesting(array, value);
+            const nesting = _buildNesting(array, _decodeUrlParameter(value));
 
             params = _mergeObjectsDeep(params, nesting);
         }

@@ -8,9 +8,20 @@
     'use strict';
 
     /**
+     * Thanks https://gist.github.com/bchapuis/5575512
+     *
+     * @param string
+     * @returns {string}
+     */
+    function decodeUrlParameter(string) {
+        return decodeURIComponent(''.concat(string).replace(/\+/g, '%20'));
+    }
+
+    /**
      * @param query
      * @returns {{}}
      */
+
     function _buildParams(query) {
         var params = {};
 
@@ -31,9 +42,9 @@
                         params[key] = [];
                     }
 
-                    params[key].push(decodeURIComponent(value));
+                    params[key].push(decodeUrlParameter(value));
                 } else {
-                    params[key] = decodeURIComponent(value);
+                    params[key] = decodeUrlParameter(value);
                 }
             });
         }
@@ -126,7 +137,7 @@
                 var array = raw.split('][');
                 array.unshift(match[1]);
 
-                var nesting = _buildNesting(array, value);
+                var nesting = _buildNesting(array, decodeUrlParameter(value));
 
                 params = _mergeObjectsDeep(params, nesting);
             }

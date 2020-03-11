@@ -7,9 +7,11 @@ describe('GET', () => {
         expect(getParams('example.com?bar=1&bar=2')).toEqual({ bar: '2' });
         expect(getParams('example.com?bar[]=1&bar[]=2')).toEqual({ bar: ['1', '2'] });
         expect(getParams('example.com?bar=1&bar[]=2')).toEqual({ bar: ['2'] });
+        expect(getParams('example.com?bar=test+test%2Ctest')).toEqual({ bar: 'test test,test' });
     });
 
     test('getParamsExtended()', () => {
+        expect(getParamsExtended('example.com?bar[t]=test+test%2Ctest')).toEqual({ bar: { t: 'test test,test' } });
         expect(getParamsExtended('example.com?bar[t]=1&bar[j]=2')).toEqual({ bar: { t: '1', j: '2' } });
         expect(getParamsExtended('example.com?bar[t]=1&bar[j]=2&bar[j]=3')).toEqual({ bar: { t: '1', j: '3' } });
         expect(getParamsExtended('example.com?b[t]=1&b[j]=2&b[j][g]=3'))
