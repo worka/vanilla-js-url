@@ -2,14 +2,15 @@ import _simplifyObject from './_simplifyObject';
 
 /**
  * @param params
+ * @param encode
  * @returns {string}
  */
-export default function _buildQueryDeep(params) {
+export default function _buildQueryDeep(params, encode = false) {
     const tree = [];
 
     _simplifyObject(params, [], tree);
 
-    const parts = tree.map(branch => {
+    let parts = tree.map(branch => {
         return branch.reduce((str, item, i) => {
             if (!str) {
                 return str + item;
@@ -20,6 +21,10 @@ export default function _buildQueryDeep(params) {
             }
         }, '');
     });
+
+    if (encode) {
+        parts = parts.map(part => encodeURIComponent(part));
+    }
 
     return parts.join('&');
 }

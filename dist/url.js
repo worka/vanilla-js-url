@@ -19,14 +19,24 @@
 
     /**
      * @param query
+     * @param decode
      * @returns {{}}
      */
 
     function _buildParams(query) {
+        var decode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : true;
         var params = {};
 
         if (query) {
             query.split('&').forEach(function(_query) {
+                // %26 => &
+                if (decode) {
+                    _query = decodeUrlParameter(_query);
+                }
+
                 var row = _query.split('=', 2);
 
                 var key = row[0];
@@ -42,9 +52,9 @@
                         params[key] = [];
                     }
 
-                    params[key].push(decodeUrlParameter(value));
+                    params[key].push(value);
                 } else {
-                    params[key] = decodeUrlParameter(value);
+                    params[key] = value;
                 }
             });
         }
@@ -119,29 +129,47 @@
 
     /**
      * @param query
+     * @param decode
      * @returns {{}}
      */
 
     function _buildParamsExtended(query) {
+        var decode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : true;
         var params = {};
-        query.split('&').forEach(function(_query, i) {
-            var row = _query.split('=', 2);
 
-            var key = row[0];
-            var value = row[1] || ''; // @todo написать получение ключей по-нормальному
+        if (query) {
+            query.split('&').forEach(function(_query, i) {
+                // %26 => &
+                if (decode) {
+                    _query = decodeUrlParameter(_query);
+                }
 
-            var match = key.match(/(.+?)(\[(.*)\])/i);
+                var row = _query.split('=', 2);
 
-            if (match) {
-                var raw = match[3] || String(i);
-                var array = raw.split('][');
-                array.unshift(match[1]);
+                var key = row[0];
+                var value = row[1] || ''; // @todo написать получение ключей по-нормальному
 
-                var nesting = _buildNesting(array, decodeUrlParameter(value));
+                var match = key.match(/(.+?)(\[(.*)\])/i); // example.com?s%5B%5D=4%264&s%5B%5D=3&r=s+s%2Bs
+                //@todo не срабатывает, так как r без []
 
-                params = _mergeObjectsDeep(params, nesting);
-            }
-        });
+                if (match) {
+                    var raw = match[3] || String(i);
+                    var array = raw.split('][');
+                    array.unshift(match[1]);
+
+                    var nesting = _buildNesting(
+                        array,
+                        decodeUrlParameter(value)
+                    );
+
+                    params = _mergeObjectsDeep(params, nesting);
+                }
+            });
+        }
+
         return params;
     }
     /**
@@ -153,9 +181,14 @@
 
     /**
      * @param params
+     * @param encode
      * @returns {string}
      */
     function _buildQuery(params) {
+        var encode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : false;
         var queries = [];
 
         var _loop = function _loop(key) {
@@ -174,6 +207,12 @@
 
         for (var key in params) {
             _loop(key);
+        }
+
+        if (encode) {
+            queries = queries.map(function(query) {
+                return encodeURIComponent(query);
+            });
         }
 
         return queries.join('&');
@@ -230,10 +269,15 @@
 
     /**
      * @param params
+     * @param encode
      * @returns {string}
      */
 
     function _buildQueryDeep(params) {
+        var encode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : false;
         var tree = [];
 
         _simplifyObject(params, [], tree);
@@ -249,6 +293,13 @@
                 }
             }, '');
         });
+
+        if (encode) {
+            parts = parts.map(function(part) {
+                return encodeURIComponent(part);
+            });
+        }
+
         return parts.join('&');
     }
     /**
@@ -309,8 +360,12 @@
             arguments.length > 0 && arguments[0] !== undefined
                 ? arguments[0]
                 : window.location.href;
+        var decode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : true;
         var splitUrl = url.split('?', 2);
-        return _buildParams(splitUrl.length === 2 ? splitUrl[1] : '');
+        return _buildParams(splitUrl.length === 2 ? splitUrl[1] : '', decode);
     }
 
     function getParamsExtended() {
@@ -318,31 +373,48 @@
             arguments.length > 0 && arguments[0] !== undefined
                 ? arguments[0]
                 : window.location.href;
+        var decode =
+            arguments.length > 1 && arguments[1] !== undefined
+                ? arguments[1]
+                : true;
         var splitUrl = url.split('?', 2);
-        return _buildParamsExtended(splitUrl.length === 2 ? splitUrl[1] : '');
+        return _buildParamsExtended(
+            splitUrl.length === 2 ? splitUrl[1] : '',
+            decode
+        );
     }
 
     function addParams(url, newParams) {
+        var encode =
+            arguments.length > 2 && arguments[2] !== undefined
+                ? arguments[2]
+                : false;
+
         if (newParams instanceof Object) {
             var uri = url.split('?', 2)[0];
             var currentParams = getParams(url);
 
             var params = _mergeObjects(currentParams, newParams);
 
-            url = ''.concat(uri, '?').concat(_buildQuery(params));
+            url = ''.concat(uri, '?').concat(_buildQuery(params, encode));
         }
 
         return url;
     }
 
     function addParamsExtended(url, newParams) {
+        var encode =
+            arguments.length > 2 && arguments[2] !== undefined
+                ? arguments[2]
+                : false;
+
         if (newParams instanceof Object) {
             var uri = url.split('?', 2)[0];
             var currentParams = getParams(url);
 
             var params = _mergeObjectsDeep(currentParams, newParams);
 
-            url = ''.concat(uri, '?').concat(_buildQueryDeep(params));
+            url = ''.concat(uri, '?').concat(_buildQueryDeep(params, encode));
         }
 
         return url;

@@ -8,6 +8,7 @@ describe('GET', () => {
         expect(getParams('example.com?bar[]=1&bar[]=2')).toEqual({ bar: ['1', '2'] });
         expect(getParams('example.com?bar=1&bar[]=2')).toEqual({ bar: ['2'] });
         expect(getParams('example.com?bar=test+test%2Ctest')).toEqual({ bar: 'test test,test' });
+        expect(getParams('example.com?s%5B%5D=4%264&s%5B%5D=3&r=s+s%2Bs')).toEqual({ s: ['4&4', '3'], r: 's s+s' });
     });
 
     test('getParamsExtended()', () => {

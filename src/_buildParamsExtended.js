@@ -4,30 +4,41 @@ import _decodeUrlParameter from './_decodeUrlParameter';
 
 /**
  * @param query
+ * @param decode
  * @returns {{}}
  */
-export default function _buildParamsExtended(query) {
+export default function _buildParamsExtended(query, decode = true) {
     let params = {};
 
-    query.split('&').forEach((_query, i) => {
-        const row = _query.split('=', 2);
+    if (query) {
+        query.split('&').forEach((_query, i) => {
+            // %26 => &
+            if (decode) {
+                _query = _decodeUrlParameter(_query);
+            }
 
-        let key = row[0];
-        let value = row[1] || '';
+            const row = _query.split('=', 2);
 
-        // @todo написать получение ключей по-нормальному
-        const match = key.match(/(.+?)(\[(.*)\])/i);
+            let key = row[0];
+            let value = row[1] || '';
 
-        if (match) {
-            const raw = match[3] || String(i);
-            const array = raw.split('][');
-            array.unshift(match[1]);
+            // @todo написать получение ключей по-нормальному
+            const match = key.match(/(.+?)(\[(.*)\])/i);
 
-            const nesting = _buildNesting(array, _decodeUrlParameter(value));
+            // example.com?s%5B%5D=4%264&s%5B%5D=3&r=s+s%2Bs
+            //@todo не срабатывает, так как r без []
 
-            params = _mergeObjectsDeep(params, nesting);
-        }
-    });
+            if (match) {
+                const raw = match[3] || String(i);
+                const array = raw.split('][');
+                array.unshift(match[1]);
+
+                const nesting = _buildNesting(array, _decodeUrlParameter(value));
+
+                params = _mergeObjectsDeep(params, nesting);
+            }
+        });
+    }
 
     return params;
 }

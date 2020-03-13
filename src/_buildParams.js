@@ -2,13 +2,19 @@ import _decodeUrlParameter from './_decodeUrlParameter';
 
 /**
  * @param query
+ * @param decode
  * @returns {{}}
  */
-export default function _buildParams(query) {
+export default function _buildParams(query, decode = true) {
     const params = {};
 
     if (query) {
         query.split('&').forEach(_query => {
+            // %26 => &
+            if (decode) {
+                _query = _decodeUrlParameter(_query);
+            }
+
             const row = _query.split('=', 2);
 
             let key = row[0];
@@ -21,9 +27,9 @@ export default function _buildParams(query) {
                     params[key] = [];
                 }
 
-                params[key].push(_decodeUrlParameter(value));
+                params[key].push(value);
             } else {
-                params[key] = _decodeUrlParameter(value);
+                params[key] = value;
             }
         });
     }

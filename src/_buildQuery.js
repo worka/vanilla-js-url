@@ -1,9 +1,10 @@
 /**
  * @param params
+ * @param encode
  * @returns {string}
  */
-export default function _buildQuery(params) {
-    const queries = [];
+export default function _buildQuery(params, encode = false) {
+    let queries = [];
 
     for (let key in params) {
         if (params.hasOwnProperty(key)) {
@@ -17,6 +18,10 @@ export default function _buildQuery(params) {
                 queries.push(`${ key }=${ value }`);
             }
         }
+    }
+
+    if (encode) {
+        queries = queries.map(query => encodeURIComponent(query));
     }
 
     return queries.join('&');
