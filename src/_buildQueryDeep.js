@@ -8,6 +8,10 @@ import _simplifyObject from './_simplifyObject';
 export default function _buildQueryDeep(params, encode = false) {
     const tree = [];
 
+    function e(string) {
+        return encode ? encodeURIComponent(string) : string;
+    }
+
     _simplifyObject(params, [], tree);
 
     let parts = tree.map(branch => {
@@ -17,14 +21,10 @@ export default function _buildQueryDeep(params, encode = false) {
             } else if (i < branch.length - 1) {
                 return `${ str }[${ item }]`;
             } else {
-                return `${ str }=${ item }`;
+                return `${ e(str) }=${ e(item) }`;
             }
         }, '');
     });
-
-    if (encode) {
-        parts = parts.map(part => encodeURIComponent(part));
-    }
 
     return parts.join('&');
 }

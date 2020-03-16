@@ -31,7 +31,7 @@ jcurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
 ````
 _`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 
-#### getParams(String url)
+#### getParams(String url, Boolean decode = true)
 `alias get()`
 
 > If you have simple parameters like `bar=1` or `foo[]=3&foo[]=5`, then use `getParams()`.<br />
@@ -55,7 +55,7 @@ jcurl.get('example.com?bar=1&bar[]=2');
 // { bar: ['2'] }
 ```
 
-#### addParams(String url, Object params)
+#### addParams(String url, Object params, Boolean encode = false)
 `alias add()`
 
 ```javascript
