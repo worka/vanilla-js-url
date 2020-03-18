@@ -191,28 +191,30 @@
                 : false;
         var queries = [];
 
+        function e(string) {
+            return encode ? encodeURIComponent(string) : string;
+        }
+
         var _loop = function _loop(key) {
             if (params.hasOwnProperty(key)) {
                 var value = params[key];
 
                 if (Array.isArray(value) && value.length) {
                     value.forEach(function(_value) {
-                        queries.push(''.concat(key, '[]=').concat(_value));
+                        queries.push(
+                            ''
+                                .concat(e(''.concat(key, '[]')), '=')
+                                .concat(e(_value))
+                        );
                     });
                 } else {
-                    queries.push(''.concat(key, '=').concat(value));
+                    queries.push(''.concat(e(key), '=').concat(e(value)));
                 }
             }
         };
 
         for (var key in params) {
             _loop(key);
-        }
-
-        if (encode) {
-            queries = queries.map(function(query) {
-                return encodeURIComponent(query);
-            });
         }
 
         return queries.join('&');
@@ -280,6 +282,10 @@
                 : false;
         var tree = [];
 
+        function e(string) {
+            return encode ? encodeURIComponent(string) : string;
+        }
+
         _simplifyObject(params, [], tree);
 
         var parts = tree.map(function(branch) {
@@ -289,17 +295,10 @@
                 } else if (i < branch.length - 1) {
                     return ''.concat(str, '[').concat(item, ']');
                 } else {
-                    return ''.concat(str, '=').concat(item);
+                    return ''.concat(e(str), '=').concat(e(item));
                 }
             }, '');
         });
-
-        if (encode) {
-            parts = parts.map(function(part) {
-                return encodeURIComponent(part);
-            });
-        }
-
         return parts.join('&');
     }
     /**
