@@ -1,10 +1,10 @@
-(function(global, factory) {
+(function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined'
         ? factory(exports)
         : typeof define === 'function' && define.amd
         ? define(['exports'], factory)
         : ((global = global || self), factory((global.jcurl = {})));
-})(this, function(exports) {
+})(this, function (exports) {
     'use strict';
 
     /**
@@ -31,7 +31,7 @@
         var params = {};
 
         if (query) {
-            query.split('&').forEach(function(_query) {
+            query.split('&').forEach(function (_query) {
                 // %26 => &
                 if (decode) {
                     _query = decodeUrlParameter(_query);
@@ -40,7 +40,7 @@
                 var row = _query.split('=', 2);
 
                 var key = row[0];
-                var value = row[1] || '';
+                var value = row[1] || ''; // @todo обработать массивы с числовыми индексами // const match = key.match(/(.+?)\[(\d*)\]/i);
 
                 if (key.substr(-2) === '[]') {
                     key = key.substr(0, key.length - 2);
@@ -103,7 +103,7 @@
             return source;
         }
 
-        Object.keys(source).forEach(function(key) {
+        Object.keys(source).forEach(function (key) {
             var targetValue = target[key];
             var sourceValue = source[key];
 
@@ -141,7 +141,7 @@
         var params = {};
 
         if (query) {
-            query.split('&').forEach(function(_query, i) {
+            query.split('&').forEach(function (_query, i) {
                 // %26 => &
                 if (decode) {
                     _query = decodeUrlParameter(_query);
@@ -156,7 +156,7 @@
                 //@todo не срабатывает, так как r без []
 
                 if (match) {
-                    var raw = match[3] || String(i);
+                    var raw = match[3] || i.toString();
                     var array = raw.split('][');
                     array.unshift(match[1]);
 
@@ -200,7 +200,7 @@
                 var value = params[key];
 
                 if (Array.isArray(value) && value.length) {
-                    value.forEach(function(_value) {
+                    value.forEach(function (_value) {
                         queries.push(
                             ''
                                 .concat(e(''.concat(key, '[]')), '=')
@@ -232,7 +232,7 @@
      * @param tree
      */
     function _simplifyObject(params, branch, tree) {
-        Object.keys(params).forEach(function(key) {
+        Object.keys(params).forEach(function (key) {
             var branch2 = branch.concat([key]);
             var params2 = params[key];
 
@@ -288,8 +288,8 @@
 
         _simplifyObject(params, [], tree);
 
-        var parts = tree.map(function(branch) {
-            return branch.reduce(function(str, item, i) {
+        var parts = tree.map(function (branch) {
+            return branch.reduce(function (str, item, i) {
                 if (!str) {
                     return str + item;
                 } else if (i < branch.length - 1) {
@@ -332,7 +332,7 @@
                         currentObject[key] = [];
                     }
 
-                    value.forEach(function(_value) {
+                    value.forEach(function (_value) {
                         currentObject[key].push(_value);
                     });
                 } else {

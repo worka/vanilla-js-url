@@ -29,7 +29,7 @@ export default function _buildParamsExtended(query, decode = true) {
             //@todo не срабатывает, так как r без []
 
             if (match) {
-                const raw = match[3] || String(i);
+                const raw = match[3] || i.toString();
                 const array = raw.split('][');
                 array.unshift(match[1]);
 

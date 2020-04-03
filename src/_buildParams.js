@@ -20,6 +20,8 @@ export default function _buildParams(query, decode = true) {
             let key = row[0];
             let value = row[1] || '';
 
+            // @todo обработать массивы с числовыми индексами // const match = key.match(/(.+?)\[(\d*)\]/i);
+
             if (key.substr(-2) === '[]') {
                 key = key.substr(0, key.length - 2);
 
