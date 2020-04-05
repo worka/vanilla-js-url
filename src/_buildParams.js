@@ -20,16 +20,21 @@ export default function _buildParams(query, decode = true) {
             let key = row[0];
             let value = row[1] || '';
 
-            // @todo обработать массивы с числовыми индексами // const match = key.match(/(.+?)\[(\d*)\]/i);
+            const match = key.match(/(.+?)\[(\d*)\]/i);
 
-            if (key.substr(-2) === '[]') {
-                key = key.substr(0, key.length - 2);
+            if (match) {
+                key = match[1];
+                let index = match[2];
 
                 if (params[key] === undefined || !Array.isArray(params[key])) {
                     params[key] = [];
                 }
 
-                params[key].push(value);
+                if (index === '') {
+                    params[key].push(value);
+                } else {
+                    params[key][index] = value;
+                }
             } else {
                 params[key] = value;
             }

@@ -9,6 +9,9 @@ describe('GET', () => {
         expect(getParams('example.com?bar=1&bar[]=2')).toEqual({ bar: ['2'] });
         expect(getParams('example.com?bar=test+test%2Ctest')).toEqual({ bar: 'test test,test' });
         expect(getParams('example.com?s%5B%5D=4%264&s%5B%5D=3&r=s+s%2Bs')).toEqual({ s: ['4&4', '3'], r: 's s+s' });
+        expect(getParams('example.com?bar[]=0&bar[1]=1&bar[2]=2')).toEqual({ bar: ['0', '1', '2'] });
+        expect(getParams('example.com?too=q&bar[]=1&bar[0]=0&bar[2]=2&foo[]=1&foo[]=2'))
+            .toEqual({ too: 'q', bar: ['0', undefined, '2'], foo: ['1', '2'] });
     });
 
     test('getParamsExtended()', () => {
@@ -32,6 +35,7 @@ describe('ADD', () => {
         expect(addParams('example.com?bar=1&bar[]=2', { bar: [3, 4] })).toBe('example.com?bar[]=2&bar[]=3&bar[]=4');
         expect(addParams('example.com?bar=1&bar=2', { bar: [3, 4] })).toBe('example.com?bar[]=3&bar[]=4');
         expect(addParams('example.com?bar[]=1&bar[]=2', { bar: [3, 4] })).toBe('example.com?bar[]=1&bar[]=2&bar[]=3&bar[]=4');
+        expect(addParams('example.com?bar[0]=1&bar[2]=2', { bar: [3, 4] })).toBe('example.com?bar[]=1&bar[]=2&bar[]=3&bar[]=4');
     });
 
     test('addParamsExtended()', () => {
