@@ -1,4 +1,4 @@
-import { getParams, getParamsExtended, addParams, addParamsExtended } from './url';
+import { getParams, getParamsExtended, addParams, addParamsExtended, getPath } from './url';
 
 describe('GET', () => {
     test('getParams()', () => {
@@ -51,5 +51,20 @@ describe('ADD', () => {
             f1: { f11: 1, f12: 2, f13: 3 }, f2: 4, f3: { f31: { f311: 6, f312: { f3121: 9 } }, f32: { f321: 2 } },
             f4: { f41: 3, f42: { f421: 2 } }, f5: [2, 4]
         })).toBe('example.com?f1[f11]=1&f1[f12]=2&f1[f13]=3&f2=4&f3[f31][f311]=6&f3[f31][f312][f3121]=9&f3[f32][f321]=2&f4[f41]=3&f4[f42][f421]=2&f5[0]=2&f5[1]=4');
+    });
+});
+
+describe('PATH', () => {
+    test('getPath()', () => {
+        expect(getPath('example.com')).toEqual('/');
+        expect(getPath('example.com/path/to/page')).toEqual('/path/to/page');
+        expect(getPath('http://example.com/path/to/page/')).toEqual('/path/to/page');
+        expect(getPath('example.com/path/to/page////')).toEqual('/path/to/page///');
+        expect(getPath('https://example.com/path/to/page?bar=1')).toEqual('/path/to/page');
+        expect(getPath('example.com/path/to/page#anchor')).toEqual('/path/to/page');
+        expect(getPath('example.com#anchor')).toEqual('/');
+        expect(getPath('//example.com?anchor')).toEqual('/');
+        expect(getPath('example.com/path other')).toEqual('/path');
+        expect(getPath('example.com/')).toEqual('/');
     });
 });

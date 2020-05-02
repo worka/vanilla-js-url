@@ -1,7 +1,8 @@
 # vanilla-js-url
 
-Object for working with url
-GET parameters: **simple get**, **simple add**
+A set of functions for working with url. Easy to add parameters to url, easy to extract parameters from url. You can also get `path` from url.
+
+**simple get**, **simple add**
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/worka/vanilla-js-url)
 [![GitHub stars](https://img.shields.io/github/stars/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/stargazers)
@@ -26,9 +27,12 @@ yarn add vanilla-js-url
 jcurl.getParams('example.com?bar=1&foo');
 jcurl.addParams('example.com', { bar: 1, foo: 2 });
 
+jcurl.getPath('example.com/path/to/page');
+
 jcurl.getParamsExtended('example.com?bar[roo][boo]=1&foo[puu]=test');
 jcurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
 ````
+
 _`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 
 #### getParams(String url, Boolean decode = true)
@@ -71,6 +75,15 @@ jcurl.add('example.com?bar=1', { bar: [2, 3] });
 jcurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
 // example.com?bar[]=2&bar[]=3&bar[]=4
 ```
+
+#### getPath(String url)
+`alias path()`
+
+```javascript
+jcurl.path('https://example.com/path/to/page?bar=1');
+// /path/to/page
+```
+
 #### getParamsExtended(String url)
 `alias getExt()`
 

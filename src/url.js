@@ -41,26 +41,34 @@ function addParamsExtended(url, newParams, encode = false) {
     return url;
 }
 
+function getPath(url = window.location.href) {
+    let path = '/';
+
+    const match = url
+        .replace(/^((?:https?:)?\/\/)/i, '') // remove scheme
+        .match(/\/(?![#?&\s])([^#?\s]+)/);
+
+    if (match) {
+        path += match[1];
+
+        if (path[path.length - 1] === '/') {
+            path = path.substr(0, path.length - 1);
+        }
+    }
+
+    return path;
+}
+
 export {
     getParams,
     getParamsExtended,
     addParams,
     addParamsExtended,
+    getPath,
     // short aliases
     getParams as get,
     getParamsExtended as getExt,
     addParams as add,
-    addParamsExtended as addExt
+    addParamsExtended as addExt,
+    getPath as path
 };
-
-// export default {
-//     getParams,
-//     getParamsExtended,
-//     addParams,
-//     addParamsExtended,
-//     // short aliases
-//     get: getParams,
-//     getExt: getParamsExtended,
-//     add: addParams,
-//     addExt: addParamsExtended
-// };

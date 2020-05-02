@@ -424,16 +424,27 @@
 
         return url;
     }
-    //     getParams,
-    //     getParamsExtended,
-    //     addParams,
-    //     addParamsExtended,
-    //     // short aliases
-    //     get: getParams,
-    //     getExt: getParamsExtended,
-    //     add: addParams,
-    //     addExt: addParamsExtended
-    // };
+
+    function getPath() {
+        var url =
+            arguments.length > 0 && arguments[0] !== undefined
+                ? arguments[0]
+                : window.location.href;
+        var path = '/';
+        var match = url
+            .replace(/^((?:https?:)?\/\/)/i, '') // remove scheme
+            .match(/\/(?![#?&\s])([^#?\s]+)/);
+
+        if (match) {
+            path += match[1];
+
+            if (path[path.length - 1] === '/') {
+                path = path.substr(0, path.length - 1);
+            }
+        }
+
+        return path;
+    }
 
     exports.add = addParams;
     exports.addExt = addParamsExtended;
@@ -443,6 +454,8 @@
     exports.getExt = getParamsExtended;
     exports.getParams = getParams;
     exports.getParamsExtended = getParamsExtended;
+    exports.getPath = getPath;
+    exports.path = getPath;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 });
