@@ -146,18 +146,15 @@
         function add() {
             var url = addUrl.value.trim();
             var object = addObject.value.trim();
-            var result = 'nothing...';
 
             try {
                 object = JSON.parse(object);
-
-                if (url && object) {
-                    result = wurl.add(url, object, addEncode.checked);
-                }
             } catch (e) {
+                object = {};
+                console.log(e);
             }
 
-            addResult.innerHTML = result;
+            addResult.innerHTML = url ? wurl.add(url, object, addEncode.checked) : 'nothing...';
         }
 
         function path() {
