@@ -24,16 +24,14 @@ yarn add vanilla-js-url
 ### Get started
 
 ```javascript
-jcurl.getParams('example.com?bar=1&foo');
-jcurl.addParams('example.com', { bar: 1, foo: 2 });
+wurl.getParams('example.com?bar=1&foo');
+wurl.addParams('example.com', { bar: 1, foo: 2 });
 
-jcurl.getPath('example.com/path/to/page');
+wurl.getPath('example.com/path/to/page');
 
-jcurl.getParamsExtended('example.com?bar[roo][boo]=1&foo[puu]=test');
-jcurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
+wurl.getParamsExtended('example.com?bar[roo][boo]=1&foo[puu]=test');
+wurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
 ````
-
-_`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 
 #### getParams(String url, Boolean decode = true)
 `alias get()`
@@ -43,19 +41,19 @@ _`jcurl` exactly, not `jsurl`, this is not a mistake :)_
 > This function is suitable in 99% of cases.
 
 ```javascript
-jcurl.get('example.com');
+wurl.get('example.com');
 // {}
 
-jcurl.get('example.com?bar=1&foo');
+wurl.get('example.com?bar=1&foo');
 // { bar: '1', foo: '' }
 
-jcurl.get('example.com?bar=1&bar=2');
+wurl.get('example.com?bar=1&bar=2');
 // { bar: '2' }
 
-jcurl.get('example.com?bar[]=1&bar[]=2');
+wurl.get('example.com?bar[]=1&bar[]=2');
 // { bar: ['1', '2'] }
 
-jcurl.get('example.com?bar=1&bar[]=2');
+wurl.get('example.com?bar=1&bar[]=2');
 // { bar: ['2'] }
 ```
 
@@ -63,16 +61,16 @@ jcurl.get('example.com?bar=1&bar[]=2');
 `alias add()`
 
 ```javascript
-jcurl.add('example.com', { bar: 1, foo: 2 });
+wurl.add('example.com', { bar: 1, foo: 2 });
 // example.com?bar=1&foo=2
 
-jcurl.add('example.com?bar=1&foo', { bar: 2, foo: 2 });
+wurl.add('example.com?bar=1&foo', { bar: 2, foo: 2 });
 // example.com?bar=2&foo=2
 
-jcurl.add('example.com?bar=1', { bar: [2, 3] });
+wurl.add('example.com?bar=1', { bar: [2, 3] });
 // example.com?bar[]=2&bar[]=3
 
-jcurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
+wurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
 // example.com?bar[]=2&bar[]=3&bar[]=4
 ```
 
@@ -80,7 +78,7 @@ jcurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
 `alias path()`
 
 ```javascript
-jcurl.path('https://example.com/path/to/page?bar=1');
+wurl.path('https://example.com/path/to/page?bar=1');
 // /path/to/page
 ```
 
@@ -92,7 +90,7 @@ jcurl.path('https://example.com/path/to/page?bar=1');
 > Most likely you will not need this function.
 
 ```javascript
-jcurl.getExt('example.com?bar[t]=1&bar[j]=2');
+wurl.getExt('example.com?bar[t]=1&bar[j]=2');
 // { bar: { t: '1', j: '2' } }
 ```
 
@@ -100,7 +98,7 @@ jcurl.getExt('example.com?bar[t]=1&bar[j]=2');
 `alias addExt()`
 
 ```javascript
-jcurl.addExt('example.com', { bar: { foo: 'test', joo: 2 } });
+wurl.addExt('example.com', { bar: { foo: 'test', joo: 2 } });
 // example.com?bar[foo]=test&bar[joo]=2
 ```
 

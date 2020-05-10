@@ -3,7 +3,7 @@
         ? factory(exports)
         : typeof define === 'function' && define.amd
         ? define(['exports'], factory)
-        : ((global = global || self), factory((global.jcurl = {})));
+        : ((global = global || self), factory((global.wurl = {})));
 })(this, function (exports) {
     'use strict';
 
