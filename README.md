@@ -2,12 +2,14 @@
 
 A set of functions for working with url. Easy to add parameters to url, easy to extract parameters from url. You can also get `path` from url.
 
-**simple get**, **simple add**
-
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/worka/vanilla-js-url)
 [![GitHub stars](https://img.shields.io/github/stars/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/issues)
 [![GitHub forks](https://img.shields.io/github/forks/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/network)
+
+**simple get**, **simple add**
+
+<a href="https://worka.github.io/vanilla-js-url/demo.html">Demo</a>
 
 ### Install
 

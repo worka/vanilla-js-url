@@ -20,23 +20,25 @@ export default function _buildParams(query, decode = true) {
             let key = row[0];
             let value = row[1] || '';
 
-            const match = key.match(/(.+?)\[(\d*)\]/i);
+            if (key) {
+                const match = key.match(/(.+?)\[(\d*)\]/i);
 
-            if (match) {
-                key = match[1];
-                let index = match[2];
+                if (match) {
+                    key = match[1];
+                    let index = match[2];
 
-                if (params[key] === undefined || !Array.isArray(params[key])) {
-                    params[key] = [];
-                }
+                    if (params[key] === undefined || !Array.isArray(params[key])) {
+                        params[key] = [];
+                    }
 
-                if (index === '') {
-                    params[key].push(value);
+                    if (index === '') {
+                        params[key].push(value);
+                    } else {
+                        params[key][index] = value;
+                    }
                 } else {
-                    params[key][index] = value;
+                    params[key] = value;
                 }
-            } else {
-                params[key] = value;
             }
         });
     }

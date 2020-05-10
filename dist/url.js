@@ -41,26 +41,29 @@
 
                 var key = row[0];
                 var value = row[1] || '';
-                var match = key.match(/(.+?)\[(\d*)\]/i);
 
-                if (match) {
-                    key = match[1];
-                    var index = match[2];
+                if (key) {
+                    var match = key.match(/(.+?)\[(\d*)\]/i);
 
-                    if (
-                        params[key] === undefined ||
-                        !Array.isArray(params[key])
-                    ) {
-                        params[key] = [];
-                    }
+                    if (match) {
+                        key = match[1];
+                        var index = match[2];
 
-                    if (index === '') {
-                        params[key].push(value);
+                        if (
+                            params[key] === undefined ||
+                            !Array.isArray(params[key])
+                        ) {
+                            params[key] = [];
+                        }
+
+                        if (index === '') {
+                            params[key].push(value);
+                        } else {
+                            params[key][index] = value;
+                        }
                     } else {
-                        params[key][index] = value;
+                        params[key] = value;
                     }
-                } else {
-                    params[key] = value;
                 }
             });
         }
