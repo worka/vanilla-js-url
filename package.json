@@ -1,6 +1,6 @@
 {
     "name": "vanilla-js-url",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "devDependencies": {
         "@babel/core": "^7.9.6",
         "@babel/preset-env": "^7.9.6",
