@@ -35,8 +35,13 @@ wurl.getParamsExtended('example.com?bar[roo][boo]=1&foo[puu]=test');
 wurl.addParamsExtended('example.com', { bar: { foo: 'test', joo: 2 } });
 ````
 
-#### getParams(String url, Boolean decode = true)
+#### getParams(url, decode)
 `alias get()`
+
+| param  | type    | default              |
+|--------|---------|----------------------|
+| url    | String  | window.location.href |
+| decode | Boolean | true                 |
 
 > If you have simple parameters like `bar=1` or `foo[]=3&foo[]=5`, then use `getParams()`.<br />
 > In response, you will get a simple (single-level) object whose keys will contain either simple values or simple arrays.
@@ -59,8 +64,14 @@ wurl.get('example.com?bar=1&bar[]=2');
 // { bar: ['2'] }
 ```
 
-#### addParams(String url, Object params, Boolean encode = false)
+#### addParams(url, params, encode)
 `alias add()`
+
+| param  | type    | default    |
+|--------|---------|------------|
+| url    | String  | `required` |
+| params | Object  | `required` |
+| encode | Boolean | false      |
 
 ```javascript
 wurl.add('example.com', { bar: 1, foo: 2 });
@@ -76,16 +87,24 @@ wurl.add('example.com?bar=1&bar[]=2', { bar: [3, 4] });
 // example.com?bar[]=2&bar[]=3&bar[]=4
 ```
 
-#### getPath(String url)
+#### getPath(url)
 `alias path()`
+
+| param  | type    | default              |
+|--------|---------|----------------------|
+| url    | String  | window.location.href |
 
 ```javascript
 wurl.path('https://example.com/path/to/page?bar=1');
 // /path/to/page
 ```
 
-#### getParamsExtended(String url)
+#### getParamsExtended(url)
 `alias getExt()`
+
+| param  | type    | default              |
+|--------|---------|----------------------|
+| url    | String  | window.location.href |
 
 > If you have complex parameters like: `bar[foo][too][poo]=3&bar[foo][goo]=4`, then use `getParamsExtended()`.<br />
 > In response, you will get a multi-level object.
@@ -96,8 +115,13 @@ wurl.getExt('example.com?bar[t]=1&bar[j]=2');
 // { bar: { t: '1', j: '2' } }
 ```
 
-#### addParamsExtended(String url, Object params)
+#### addParamsExtended(url, params)
 `alias addExt()`
+
+| param  | type    | default    |
+|--------|---------|------------|
+| url    | String  | `required` |
+| params | Object  | `required` |
 
 ```javascript
 wurl.addExt('example.com', { bar: { foo: 'test', joo: 2 } });
