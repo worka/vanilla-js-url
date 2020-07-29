@@ -1,5 +1,7 @@
 # vanilla-js-url
 
+A lightweight module to construct and parse query parameters of URLs.
+
 A set of functions for working with url. Easy to add parameters to url, easy to extract parameters from url. You can also get `path` from url.
 
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/worka/vanilla-js-url)
