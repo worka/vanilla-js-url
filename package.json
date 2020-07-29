@@ -29,6 +29,11 @@
     },
     "keywords": [
         "url",
+        "add",
+        "get",
+        "params",
+        "construct",
+        "parse",
         "add params to url",
         "get params from url",
         "js",
