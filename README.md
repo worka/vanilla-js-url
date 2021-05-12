@@ -4,6 +4,8 @@ A lightweight module to construct and parse query parameters of URLs.
 
 A set of functions for working with url. Easy to add parameters to url, easy to extract parameters from url. You can also get `path` from url.
 
+🖐 If you find my plugin helpful, please <a href="https://paypal.me/bworka">donate me</a> 🤝
+
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/worka/vanilla-js-url)
 [![GitHub stars](https://img.shields.io/github/stars/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/worka/vanilla-js-url)](https://github.com/worka/vanilla-js-url/issues)
