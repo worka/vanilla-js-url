@@ -1,15 +1,16 @@
 {
     "name": "vanilla-js-url",
     "version": "3.0.4",
+    "main": "/src/url.js",
     "devDependencies": {
-        "@babel/core": "^7.9.6",
-        "@babel/preset-env": "^7.9.6",
+        "@babel/core": "^7.14.6",
+        "@babel/preset-env": "^7.14.7",
         "babel-minify": "^0.5.1",
-        "eslint": "^7.0.0",
+        "eslint": "^7.30.0",
         "esm": "^3.2.25",
-        "jest": "^26.0.1",
-        "prettier": "2.0.5",
-        "rollup": "^2.9.1",
+        "jest": "^27.0.6",
+        "prettier": "2.3.2",
+        "rollup": "^2.53.1",
         "rollup-plugin-babel": "^4.4.0"
     },
     "scripts": {
