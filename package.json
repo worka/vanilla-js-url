@@ -3,7 +3,7 @@
     "version": "3.0.5",
     "main": "src/url.js",
     "devDependencies": {
-        "@babel/core": "^7.14.6",
+        "@babel/core": "^7.29.6",
         "@babel/preset-env": "^7.14.7",
         "babel-minify": "^0.5.1",
         "eslint": "^7.30.0",
